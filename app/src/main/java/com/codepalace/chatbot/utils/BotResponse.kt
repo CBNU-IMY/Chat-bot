@@ -76,9 +76,9 @@ object BotResponse {
             //When the programme doesn't understand...
             else -> {
                 when (random) {
-                    0 -> "I don't understand..."
-                    1 -> "Try asking me something different"
-                    2 -> "Idk"
+                    0 -> "무슨 말인지 잘 모르겠어..."
+                    1 -> "미안 다시 한 번 말해줄래??"
+                    2 -> "뭐라고 했지??"
                     else -> "error"
                 }
             }
