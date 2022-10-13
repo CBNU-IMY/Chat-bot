@@ -10,43 +10,48 @@ import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.speech.tts.TextToSpeech
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.codepalace.chatbot.R
 import com.codepalace.chatbot.data.Message
-import com.codepalace.chatbot.databinding.ActivityMainBinding
+import com.codepalace.chatbot.databinding.ActivityChatbotBinding
 import com.codepalace.chatbot.utils.Constants.RECEIVE_ID
 import com.codepalace.chatbot.utils.Constants.SEND_ID
 import com.codepalace.chatbot.utils.BotResponse
 import com.codepalace.chatbot.utils.Constants.OPEN_GOOGLE
 import com.codepalace.chatbot.utils.Constants.OPEN_SEARCH
 import com.codepalace.chatbot.utils.Time
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_chatbot.*
 import kotlinx.coroutines.*
+import java.util.*
 
-private lateinit var binding: ActivityMainBinding
+private lateinit var binding: ActivityChatbotBinding
 
-class MainActivity : AppCompatActivity() {
+class Chatbot : AppCompatActivity() {
     private val TAG = "MainActivity"
     private lateinit var speechRecognizer: SpeechRecognizer
+    private var textToSpeech: TextToSpeech? = null
 
     //You can ignore this messageList if you're coming from the tutorial,
     // it was used only for my personal debugging
     var messagesList = mutableListOf<Message>()
 
     private lateinit var adapter: MessagingAdapter
-    private val botList = listOf("Peter", "Francesca", "Luigi", "Igor")
+    private val botList = listOf("상우야", "정주야", "승규야")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityChatbotBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
         // 권한 설정
         requestPermission()
+
+        setAlarm()
 
         // RecognizerIntent 생성
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
@@ -56,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         // <말하기> 버튼 눌러서 음성인식 시작
         binding.btnSpeech.setOnClickListener {
             // 새 SpeechRecognizer 를 만드는 팩토리 메서드
-            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this@MainActivity)
+            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this@Chatbot)
             speechRecognizer.setRecognitionListener(recognitionListener)    // 리스너 설정
             speechRecognizer.startListening(intent)                         // 듣기 시작
         }
@@ -66,17 +71,29 @@ class MainActivity : AppCompatActivity() {
         clickEvents()
 
         val random = (0..3).random()
-        customBotMessage("Hello! Today you're speaking with ${botList[random]}, how may I help?")
+        customBotMessage("안녕! 좋은 하루야 ${botList[random]}, 무슨 일 있어??")
+    }
+
+    private fun setAlarm() {
+        textToSpeech = TextToSpeech(this@Chatbot, TextToSpeech.OnInitListener {
+            if (it == TextToSpeech.SUCCESS) {
+                val result = textToSpeech!!.setLanguage(Locale.KOREAN)
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Log.e("TTS","해당언어는 지원되지 않습니다.")
+                    return@OnInitListener
+                }
+            }
+        })
     }
 
     // 권한 설정 메소드
     private fun requestPermission() {
         // 버전 체크, 권한 허용했는지 체크
         if (Build.VERSION.SDK_INT >= 23 &&
-            ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.RECORD_AUDIO)
+            ContextCompat.checkSelfPermission(this@Chatbot, Manifest.permission.RECORD_AUDIO)
             != PackageManager.PERMISSION_GRANTED
         ) {
-            ActivityCompat.requestPermissions(this@MainActivity,
+            ActivityCompat.requestPermissions(this@Chatbot,
                 arrayOf(Manifest.permission.RECORD_AUDIO), 0)
         }
     }
@@ -122,6 +139,7 @@ class MainActivity : AppCompatActivity() {
             val matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
             for (i in matches!!.indices) binding.etMessage.setText(matches[i])
             sendMessage()
+
         }
         // 부분 인식 결과를 사용할 수 있을 때 호출
         override fun onPartialResults(partialResults: Bundle) {}
@@ -180,6 +198,7 @@ class MainActivity : AppCompatActivity() {
             rv_messages.scrollToPosition(adapter.itemCount - 1)
 
             botResponse(message)
+
         }
     }
 
@@ -218,6 +237,9 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 }
+
+                textToSpeech?.speak(response, TextToSpeech.QUEUE_FLUSH, null)
+                textToSpeech?.playSilentUtterance(750,TextToSpeech.QUEUE_ADD,null) // deley시간 설정
             }
         }
     }
@@ -232,6 +254,9 @@ class MainActivity : AppCompatActivity() {
                 adapter.insertMessage(Message(message, RECEIVE_ID, timeStamp))
 
                 rv_messages.scrollToPosition(adapter.itemCount - 1)
+
+                textToSpeech?.speak(message, TextToSpeech.QUEUE_FLUSH, null)
+                textToSpeech?.playSilentUtterance(750,TextToSpeech.QUEUE_ADD,null) // deley시간 설정
             }
         }
     }
