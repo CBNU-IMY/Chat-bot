@@ -1,4 +1,4 @@
-package com.codepalace.chatbot.data
+package com.codepalace.chatbot.Data
 
 class User {
     var user_id: String? = null

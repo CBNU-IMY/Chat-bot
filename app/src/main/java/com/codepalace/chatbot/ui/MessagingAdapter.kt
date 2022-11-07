@@ -1,14 +1,12 @@
 package com.codepalace.chatbot.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.codepalace.chatbot.R
-import com.codepalace.chatbot.data.Message
+import com.codepalace.chatbot.Data.Message
 import com.codepalace.chatbot.utils.Constants.RECEIVE_ID
 import com.codepalace.chatbot.utils.Constants.SEND_ID
 import kotlinx.android.synthetic.main.message_item.view.*

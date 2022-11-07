@@ -1,10 +1,10 @@
-package com.codepalace.chatbot.api
+package com.codepalace.chatbot.Api
 
-import com.codepalace.chatbot.data.User
+import com.codepalace.chatbot.Data.User
 import retrofit2.Call
 import retrofit2.http.*
 
-public interface API {
+public interface UserApi {
     @POST("api/user")
     fun postSignupResponse(@Body user: User): Call<String>
 
