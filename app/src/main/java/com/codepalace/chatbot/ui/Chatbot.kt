@@ -24,6 +24,8 @@ import com.codepalace.chatbot.databinding.ActivityChatbotBinding
 import com.codepalace.chatbot.utils.Constants.RECEIVE_ID
 import com.codepalace.chatbot.utils.Constants.SEND_ID
 import com.codepalace.chatbot.utils.BotResponse
+import com.codepalace.chatbot.utils.BotResponseAccept
+import com.codepalace.chatbot.utils.BotResponseRefuse
 import com.codepalace.chatbot.utils.Constants.OPEN_GOOGLE
 import com.codepalace.chatbot.utils.Constants.OPEN_SEARCH
 import com.codepalace.chatbot.utils.Time
@@ -40,6 +42,7 @@ class Chatbot : AppCompatActivity() {
     private val TAG = "MainActivity"
     private lateinit var speechRecognizer: SpeechRecognizer
     private var textToSpeech: TextToSpeech? = null
+    val sexmachine="hello"
 
     //You can ignore this messageList if you're coming from the tutorial,
     // it was used only for my personal debugging
@@ -47,17 +50,19 @@ class Chatbot : AppCompatActivity() {
 
     private lateinit var adapter: MessagingAdapter
     private val botList = listOf("상우야", "정주야", "승규야")
-    private lateinit var corpusex : CorpusDto
-    private var corpuslist : List<CorpusDto> = listOf()
+    private var corpuslist : List<CorpusDto> = listOf() //corpus 데이터 받을 리스트 변수
+    private lateinit var stage : String      //register로 부터 입력받은 우울증 단계
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        stage=intent.getStringExtra("stage")!!
+
         super.onCreate(savedInstanceState)
         binding = ActivityChatbotBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        corpusex= CorpusDto()
+   
 
-        Corpuslist2()
+        Corpuslist()
 
         // 권한 설정
         requestPermission()
@@ -82,7 +87,15 @@ class Chatbot : AppCompatActivity() {
         clickEvents()
 
         val random = (0..3).random()
-        customBotMessage("안녕! 좋은 하루야 ${botList[random]}, 무슨 일 있어??")
+        if(stage.equals("refuse")){
+            customBotMessage("안녕! ${botList[random]}, 오늘 어떤 일이 있었는지 말해줄래?")
+        }
+        else if(stage.equals("bargain")){
+
+        }
+        else{
+            customBotMessage("${botList[random]} 안녕, 무슨일이 있었니?")
+        }
     }
 
     private fun setAlarm() {
@@ -220,12 +233,19 @@ class Chatbot : AppCompatActivity() {
         GlobalScope.launch {
             //Fake response delay
             delay(1000)
-
+            var response=""
             withContext(Dispatchers.Main) {
-                println("corpuslist mansin = ${corpuslist}")
-                //Gets the response
-                val response = BotResponse.basicResponses(message,corpuslist)
 
+                //Gets the response(3 case)
+                if(stage.equals("refuse")) {
+                     response = BotResponseRefuse.basicResponses(message, corpuslist)
+                }
+                else if(stage.equals("bargain")){
+                     response = BotResponse.basicResponses(message, corpuslist)
+                }
+                else{
+                     response = BotResponseAccept.basicResponses(message, corpuslist)
+                }
                 //Adds it to our local list
                 messagesList.add(Message(response, RECEIVE_ID, timeStamp))
 
@@ -276,9 +296,18 @@ class Chatbot : AppCompatActivity() {
 
 
 
-    fun Corpuslist2(){
- 
-        val call = RetrofitBuilder.corpusapi.getAllByMaincategoryResponse("상처")
+    fun Corpuslist(){
+        lateinit var call : Call<List<CorpusDto>>
+        if(stage.equals("refuse")){
+            call = RetrofitBuilder.corpusapi.getAllByMaincategoryResponse("분노")
+        }
+        else if(stage.equals("bargain")){
+
+        }
+        else{
+            call = RetrofitBuilder.corpusapi.getAllByMaincategoryResponse("슬픔")
+        }
+        //val call = RetrofitBuilder.corpusapi.getAllByMaincategoryResponse("상처")
         var corpus = CorpusDto2("test")
         corpus.system_response1="test2"
         println("corpus = ${corpus}")
@@ -292,7 +321,6 @@ class Chatbot : AppCompatActivity() {
                     if(response.isSuccessful()){ // 응답 잘 받은 경우
                         corpuslist= response.body()!!
                         println("corpuslist = ${corpuslist}")
-                        corpusex.system_response1=response.body()!!.get(1).system_response1
                     }else{
                         // 통신 성공 but 응답 실패
                         Log.d("RESPONSE", "FAILURE")

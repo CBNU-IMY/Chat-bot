@@ -1,22 +1,17 @@
 package com.codepalace.chatbot.utils
 
 import android.util.Log
-import com.codepalace.chatbot.Api.CorpusApi
 import com.codepalace.chatbot.Api.RetrofitBuilder
 import com.codepalace.chatbot.Dto.CorpusDto
 import com.codepalace.chatbot.Dto.CorpusDto2
-import com.codepalace.chatbot.utils.Constants.OPEN_GOOGLE
-import com.codepalace.chatbot.utils.Constants.OPEN_SEARCH
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.sql.Date
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import kotlinx.coroutines.*
 
-object BotResponse {
-
+object BotResponseBargain {
     fun basicResponses(_message: String, _corpuslist: List<CorpusDto>): String {
 
         val random = (0..2).random()
@@ -49,13 +44,13 @@ object BotResponse {
             message.contains("hello") -> {
                 println("corpuslist mansinn = ${corpuslist}")
 
-               // println("second name = ${name}")
+                // println("second name = ${name}")
                 corpuslist.get(2).system_response1
-              /*  when (random) {
-                  //  0 -> sexmessage
-                   /* 1 -> "Sup"
-                    2 -> "Buongiorno!"*/
-                  //  else -> "error" }*/
+                /*  when (random) {
+                    //  0 -> sexmessage
+                     /* 1 -> "Sup"
+                      2 -> "Buongiorno!"*/
+                    //  else -> "error" }*/
             }
 
             //How are you?
@@ -79,12 +74,12 @@ object BotResponse {
 
             //Open Google
             message.contains("open") && message.contains("google")-> {
-                OPEN_GOOGLE
+                Constants.OPEN_GOOGLE
             }
 
             //Search on the internet
             message.contains("search")-> {
-                OPEN_SEARCH
+                Constants.OPEN_SEARCH
             }
 
             //When the programme doesn't understand...
@@ -102,7 +97,7 @@ object BotResponse {
 
     fun Corpuslist2(_corpuslist : CorpusDto){
         var corpuslist=_corpuslist
-        
+
         val call = RetrofitBuilder.corpusapi.getAllByMaincategoryResponse("상처")
         var corpus = CorpusDto2("test")
         corpus.system_response1="test2"
@@ -143,7 +138,4 @@ object BotResponse {
         println("third corpus = ${corpus}")
 
     }
-
-
-
 }

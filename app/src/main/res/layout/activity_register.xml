@@ -12,26 +12,25 @@
         android:id="@+id/userId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="44dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="Id"
+        android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/userPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/userPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="52dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="Password"
+        android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/userName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
@@ -63,52 +62,45 @@
         android:id="@+id/userPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="332dp"
+        android:layout_marginBottom="308dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="Phone"
+        android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_sign"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="228dp"
+        android:layout_marginBottom="248dp"
         android:text="회원가입"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_userlist"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.879"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_userlist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="68dp"
-        android:layout_marginBottom="228dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="248dp"
         android:text="회원목록"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/btn_Next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="다음"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="363dp"
-        android:layout_height="132dp"
-        android:layout_marginBottom="4dp"
+        android:layout_width="365dp"
+        android:layout_height="152dp"
+        android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
@@ -128,10 +120,10 @@
         android:id="@+id/btn_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:text="회원수정"
         app:layout_constraintEnd_toStartOf="@+id/btn_delete"
-        app:layout_constraintHorizontal_bias="0.882"
+        app:layout_constraintHorizontal_bias="0.878"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_sign" />
 
@@ -139,8 +131,8 @@
         android:id="@+id/btn_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="68dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="48dp"
         android:text="회원삭제"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_userlist" />
@@ -149,24 +141,49 @@
         android:id="@+id/btn_corpus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="508dp"
+        android:layout_marginBottom="248dp"
         android:text="감성데이터"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_sign"
-        app:layout_constraintHorizontal_bias="0.411"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.561"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_update"
-        app:layout_constraintHorizontal_bias="0.383"
+        app:layout_constraintHorizontal_bias="0.581"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_corpus"
-        app:layout_constraintVertical_bias="0.012" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_corpus" />
+
+    <Button
+        android:id="@+id/btnBargain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:text="흥정"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnAccept" />
+
+    <Button
+        android:id="@+id/btnRefuse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="거부"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnBargain"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnAccept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="수용"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

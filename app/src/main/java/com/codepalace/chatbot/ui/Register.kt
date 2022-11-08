@@ -75,8 +75,14 @@ class Register : AppCompatActivity() {
             Corpuslist();
         }
 
-        binding.btnNext.setOnClickListener {
-            startActivity(Intent(this@Register,Chatbot::class.java))
+        binding.btnAccept.setOnClickListener {
+            startActivity(Intent(this@Register,Chatbot::class.java).putExtra("stage", "accept"))
+        }
+        binding.btnBargain.setOnClickListener {
+            startActivity(Intent(this@Register,Chatbot::class.java).putExtra("stage", "bargain"))
+        }
+        binding.btnRefuse.setOnClickListener {
+            startActivity(Intent(this@Register,Chatbot::class.java).putExtra("stage", "refuse"))
         }
 
     }
