@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.codepalace.chatbot">
+    package="com.codepalace.chatbot"
+    android:installLocation="preferExternal">
     <!-- 인터넷 권한 -->
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 오디오 사용 권한 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />

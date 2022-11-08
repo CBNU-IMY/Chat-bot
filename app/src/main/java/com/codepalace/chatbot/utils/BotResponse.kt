@@ -1,17 +1,32 @@
 package com.codepalace.chatbot.utils
 
+import android.util.Log
+import com.codepalace.chatbot.Api.CorpusApi
+import com.codepalace.chatbot.Api.RetrofitBuilder
+import com.codepalace.chatbot.Dto.CorpusDto
+import com.codepalace.chatbot.Dto.CorpusDto2
 import com.codepalace.chatbot.utils.Constants.OPEN_GOOGLE
 import com.codepalace.chatbot.utils.Constants.OPEN_SEARCH
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.sql.Date
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
+import kotlinx.coroutines.*
 
 object BotResponse {
 
-    fun basicResponses(_message: String): String {
+    fun basicResponses(_message: String, _sexmessage: String): String {
 
         val random = (0..2).random()
         val message =_message.toLowerCase()
+        var sexmessage=_sexmessage
+        println("sexmessage = ${sexmessage}")
+        //val name = Corpuslist2()
+        var corpuslist= CorpusDto()
+        Corpuslist2(corpuslist)
+      //  println("first name = ${name}")
 
         return when {
 
@@ -37,11 +52,14 @@ object BotResponse {
 
             //Hello
             message.contains("hello") -> {
-                when (random) {
-                    0 -> "Hello there!"
-                    1 -> "Sup"
-                    2 -> "Buongiorno!"
-                    else -> "error" }
+
+               // println("second name = ${name}")
+                sexmessage
+              /*  when (random) {
+                  //  0 -> sexmessage
+                   /* 1 -> "Sup"
+                    2 -> "Buongiorno!"*/
+                  //  else -> "error" }*/
             }
 
             //How are you?
@@ -84,4 +102,95 @@ object BotResponse {
             }
         }
     }
+
+
+    /* fun Corpuslist2(): CorpusDto2{
+
+
+        val call = RetrofitBuilder.corpusapi.getAllByMaincategoryResponse("상처")
+        var corpus = CorpusDto2("test")
+        corpus.system_response1="test2"
+        println("corpus = ${corpus}")
+
+
+        call.enqueue(object : Callback<List<CorpusDto>> { // 비동기 방식 통신 메소드
+            override fun onResponse( // 통신에 성공한 경우
+                call: Call<List<CorpusDto>>,
+                response: Response<List<CorpusDto>>
+            ) {
+                if(response.isSuccessful()){ // 응답 잘 받은 경우
+
+                    println("response.body() = ${response.body()}")
+                    corpus.system_response1=response.body()?.get(0)!!.system_response1
+                    println("second corpus = ${corpus}")
+                }else{
+                    // 통신 성공 but 응답 실패
+                    Log.d("RESPONSE", "FAILURE")
+                }
+
+            }
+
+            override fun onFailure(call: Call<List<CorpusDto>>, t: Throwable) {
+                // 통신에 실패한 경우
+                Log.d("CONNECTION FAILURE: ", t.localizedMessage)
+            }
+        })
+
+        println("third corpus = ${corpus}")
+        return corpus;
+
+    }
+
+    fun sendData(corpus: CorpusDto2): CorpusDto2 {
+        return corpus;
+    }*/
+
+    fun Corpuslist2(_corpuslist : CorpusDto){
+        var corpuslist=_corpuslist
+        
+        val call = RetrofitBuilder.corpusapi.getAllByMaincategoryResponse("상처")
+        var corpus = CorpusDto2("test")
+        corpus.system_response1="test2"
+        println("corpus = ${corpus}")
+
+        Thread{
+            call.enqueue(object : Callback<List<CorpusDto>> { // 비동기 방식 통신 메소드
+                override fun onResponse( // 통신에 성공한 경우
+                    call: Call<List<CorpusDto>>,
+                    response: Response<List<CorpusDto>>
+                ) {
+                    if(response.isSuccessful()){ // 응답 잘 받은 경우
+                        corpuslist= response.body()!!.get(0)
+                        println("corpuslist = ${corpuslist}")
+                        println("response.body() = ${response.body()}")
+                        corpus.system_response1=response.body()?.get(0)!!.system_response1
+                        println("second corpus = ${corpus}")
+                    }else{
+                        // 통신 성공 but 응답 실패
+                        Log.d("RESPONSE", "FAILURE")
+                    }
+
+                }
+
+                override fun onFailure(call: Call<List<CorpusDto>>, t: Throwable) {
+                    // 통신에 실패한 경우
+                    Log.d("CONNECTION FAILURE: ", t.localizedMessage)
+                }
+            })
+        }.start()
+
+        try{
+            Thread.sleep(50)
+        } catch(e: Exception){
+            e.printStackTrace()
+        }
+
+        println("third corpus = ${corpus}")
+
+    }
+
+    fun sendData(corpus: CorpusDto2): CorpusDto2 {
+        return corpus;
+    }
+
 }

@@ -4,7 +4,7 @@ import com.codepalace.chatbot.Dto.CorpusDto
 import retrofit2.Call
 import retrofit2.http.*
 
-interface CorpusApi {
+public interface CorpusApi {
 
 
     @GET("/api/corpus/emotion_maincategory/{emotion_maincategory}")

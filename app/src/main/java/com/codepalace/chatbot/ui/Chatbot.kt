@@ -16,7 +16,10 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.codepalace.chatbot.Api.RetrofitBuilder
 import com.codepalace.chatbot.Data.Message
+import com.codepalace.chatbot.Dto.CorpusDto
+import com.codepalace.chatbot.Dto.CorpusDto2
 import com.codepalace.chatbot.databinding.ActivityChatbotBinding
 import com.codepalace.chatbot.utils.Constants.RECEIVE_ID
 import com.codepalace.chatbot.utils.Constants.SEND_ID
@@ -26,6 +29,9 @@ import com.codepalace.chatbot.utils.Constants.OPEN_SEARCH
 import com.codepalace.chatbot.utils.Time
 import kotlinx.android.synthetic.main.activity_chatbot.*
 import kotlinx.coroutines.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 private lateinit var binding: ActivityChatbotBinding
@@ -41,12 +47,17 @@ class Chatbot : AppCompatActivity() {
 
     private lateinit var adapter: MessagingAdapter
     private val botList = listOf("상우야", "정주야", "승규야")
+    private lateinit var corpusex : CorpusDto
+    private var corpuslist : List<CorpusDto> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatbotBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        corpusex= CorpusDto()
+
+        Corpuslist2()
 
         // 권한 설정
         requestPermission()
@@ -203,6 +214,7 @@ class Chatbot : AppCompatActivity() {
     }
 
     private fun botResponse(message: String) {
+
         val timeStamp = Time.timeStamp()
 
         GlobalScope.launch {
@@ -211,14 +223,14 @@ class Chatbot : AppCompatActivity() {
 
             withContext(Dispatchers.Main) {
                 //Gets the response
-                val response = BotResponse.basicResponses(message)
+                val response = BotResponse.basicResponses(message,corpusex.system_response1)
 
                 //Adds it to our local list
                 messagesList.add(Message(response, RECEIVE_ID, timeStamp))
 
                 //Inserts our message into the adapter
+                //adapter.insertMessage(Message(response, RECEIVE_ID, timeStamp))
                 adapter.insertMessage(Message(response, RECEIVE_ID, timeStamp))
-
                 //Scrolls us to the position of the latest message
                 rv_messages.scrollToPosition(adapter.itemCount - 1)
 
@@ -260,4 +272,50 @@ class Chatbot : AppCompatActivity() {
             }
         }
     }
+
+
+
+    fun Corpuslist2(){
+ 
+        val call = RetrofitBuilder.corpusapi.getAllByMaincategoryResponse("상처")
+        var corpus = CorpusDto2("test")
+        corpus.system_response1="test2"
+        println("corpus = ${corpus}")
+
+        Thread{
+            call.enqueue(object : Callback<List<CorpusDto>> { // 비동기 방식 통신 메소드
+                override fun onResponse( // 통신에 성공한 경우
+                    call: Call<List<CorpusDto>>,
+                    response: Response<List<CorpusDto>>
+                ) {
+                    if(response.isSuccessful()){ // 응답 잘 받은 경우
+                        corpuslist= response.body()!!
+                        println("corpuslist = ${corpuslist}")
+                        corpusex.system_response1=response.body()!!.get(1).system_response1
+                    }else{
+                        // 통신 성공 but 응답 실패
+                        Log.d("RESPONSE", "FAILURE")
+                    }
+
+                }
+
+                override fun onFailure(call: Call<List<CorpusDto>>, t: Throwable) {
+                    // 통신에 실패한 경우
+                    Log.d("CONNECTION FAILURE: ", t.localizedMessage)
+                }
+            })
+        }.start()
+
+        try{
+            Thread.sleep(50)
+        } catch(e: Exception){
+            e.printStackTrace()
+        }
+
+        println("third corpus = ${corpus}")
+
+    }
+
+
+
 }
