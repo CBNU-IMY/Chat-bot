@@ -222,8 +222,9 @@ class Chatbot : AppCompatActivity() {
             delay(1000)
 
             withContext(Dispatchers.Main) {
+                println("corpuslist mansin = ${corpuslist}")
                 //Gets the response
-                val response = BotResponse.basicResponses(message,corpusex.system_response1)
+                val response = BotResponse.basicResponses(message,corpuslist)
 
                 //Adds it to our local list
                 messagesList.add(Message(response, RECEIVE_ID, timeStamp))

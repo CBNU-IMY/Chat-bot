@@ -17,16 +17,11 @@ import kotlinx.coroutines.*
 
 object BotResponse {
 
-    fun basicResponses(_message: String, _sexmessage: String): String {
+    fun basicResponses(_message: String, _corpuslist: List<CorpusDto>): String {
 
         val random = (0..2).random()
         val message =_message.toLowerCase()
-        var sexmessage=_sexmessage
-        println("sexmessage = ${sexmessage}")
-        //val name = Corpuslist2()
-        var corpuslist= CorpusDto()
-        Corpuslist2(corpuslist)
-      //  println("first name = ${name}")
+        var corpuslist=_corpuslist
 
         return when {
 
@@ -52,9 +47,10 @@ object BotResponse {
 
             //Hello
             message.contains("hello") -> {
+                println("corpuslist mansinn = ${corpuslist}")
 
                // println("second name = ${name}")
-                sexmessage
+                corpuslist.get(2).system_response1
               /*  when (random) {
                   //  0 -> sexmessage
                    /* 1 -> "Sup"
