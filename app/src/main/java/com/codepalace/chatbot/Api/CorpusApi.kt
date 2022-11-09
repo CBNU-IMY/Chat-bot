@@ -12,15 +12,14 @@ public interface CorpusApi {
         @Path("emotion_maincategory") emotion_maincategory: String,
     ) : Call<List<CorpusDto>>
 
-/*
+   @GET("/api/corpus/{corpus_id}")
+   fun getOneByCorpusidResponse(
+       @Path("corpus_id") corpus_id: Long
+   ) : Call<List<CorpusDto>>
 
-    @FormUrlEncoded
-    @PUT("api/user/{user_id}")
-    fun postUpdateResponse(
-        @Path("user_id") user_id: String?,
-        @Field("user_pw") user_pw: String,
-        @Field("user_phone") user_phone: String,
-        @Field("user_name") user_name: String
-    ): Call<String>*/
+    @GET("/api/corpus/status_keyword/{status_keyword}")
+    fun getAllbyStatuskeywordResponse(
+        @Path("status_keyword") status_keyword: String
+    ) : Call<List<CorpusDto>>
 
 }

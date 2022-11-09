@@ -21,14 +21,11 @@ import com.codepalace.chatbot.Data.Message
 import com.codepalace.chatbot.Dto.CorpusDto
 import com.codepalace.chatbot.Dto.CorpusDto2
 import com.codepalace.chatbot.databinding.ActivityChatbotBinding
+import com.codepalace.chatbot.utils.*
 import com.codepalace.chatbot.utils.Constants.RECEIVE_ID
 import com.codepalace.chatbot.utils.Constants.SEND_ID
-import com.codepalace.chatbot.utils.BotResponse
-import com.codepalace.chatbot.utils.BotResponseAccept
-import com.codepalace.chatbot.utils.BotResponseRefuse
 import com.codepalace.chatbot.utils.Constants.OPEN_GOOGLE
 import com.codepalace.chatbot.utils.Constants.OPEN_SEARCH
-import com.codepalace.chatbot.utils.Time
 import kotlinx.android.synthetic.main.activity_chatbot.*
 import kotlinx.coroutines.*
 import retrofit2.Call
@@ -42,7 +39,6 @@ class Chatbot : AppCompatActivity() {
     private val TAG = "MainActivity"
     private lateinit var speechRecognizer: SpeechRecognizer
     private var textToSpeech: TextToSpeech? = null
-    val sexmachine="hello"
 
     //You can ignore this messageList if you're coming from the tutorial,
     // it was used only for my personal debugging
@@ -88,10 +84,10 @@ class Chatbot : AppCompatActivity() {
 
         val random = (0..3).random()
         if(stage.equals("refuse")){
-            customBotMessage("안녕! ${botList[random]}, 오늘 어떤 일이 있었는지 말해줄래?")
+            customBotMessage("안녕! ${botList[random]}, 나는 IMY야")
         }
         else if(stage.equals("bargain")){
-
+            customBotMessage("안녕! ${botList[random]}, 무슨 일 있어?")
         }
         else{
             customBotMessage("${botList[random]} 안녕, 무슨일이 있었니?")
@@ -241,7 +237,7 @@ class Chatbot : AppCompatActivity() {
                      response = BotResponseRefuse.basicResponses(message, corpuslist)
                 }
                 else if(stage.equals("bargain")){
-                     response = BotResponse.basicResponses(message, corpuslist)
+                     response = BotResponseBargain.basicResponses(message, corpuslist)
                 }
                 else{
                      response = BotResponseAccept.basicResponses(message, corpuslist)
@@ -296,21 +292,18 @@ class Chatbot : AppCompatActivity() {
 
 
 
-    fun Corpuslist(){
+    fun Corpuslist() {
         lateinit var call : Call<List<CorpusDto>>
         if(stage.equals("refuse")){
             call = RetrofitBuilder.corpusapi.getAllByMaincategoryResponse("분노")
         }
         else if(stage.equals("bargain")){
-
+            call=RetrofitBuilder.corpusapi.getAllbyStatuskeywordResponse("연애, 결혼, 출산")
         }
         else{
             call = RetrofitBuilder.corpusapi.getAllByMaincategoryResponse("슬픔")
         }
-        //val call = RetrofitBuilder.corpusapi.getAllByMaincategoryResponse("상처")
-        var corpus = CorpusDto2("test")
-        corpus.system_response1="test2"
-        println("corpus = ${corpus}")
+
 
         Thread{
             call.enqueue(object : Callback<List<CorpusDto>> { // 비동기 방식 통신 메소드
@@ -340,8 +333,6 @@ class Chatbot : AppCompatActivity() {
         } catch(e: Exception){
             e.printStackTrace()
         }
-
-        println("third corpus = ${corpus}")
 
     }
 

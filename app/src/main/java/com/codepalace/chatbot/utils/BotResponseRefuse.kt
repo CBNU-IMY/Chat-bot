@@ -42,26 +42,22 @@ object BotResponseRefuse {
 
             //Hello
             message.contains("안녕") -> {
-                when (random) {
-                    0 -> "안녕하세요 오늘 하루 기분이 어떠신가요?"
-                    1 -> "안녕하세요 반가워요"
-                    else -> "error"
-                }
+                "반가워 나를 친구처럼 대해줄래?"
             }
 
             //친구 비하(1)
-            message.contains("친구") && message.contains("취업") -> {
-                    corpuslist.get(1).system_response1
+            message.contains("얘기") -> {
+                "그냥 일상 이야기든 고민이든 너가 하고싶은 이야기를 하면 돼"
             }
 
             //친구 비하(2)
-            message.contains("사람") && message.contains("응") -> {
-                  corpuslist.get(1).system_response2
+            message.contains("치료") -> {
+                  "그렇게 생각해주니 고마워"
             }
 
             //친구 비하(3)
-            message.contains("진심") -> {
-                    corpuslist.get(1).system_response3
+            message.contains("다음") -> {
+                    "응 다음에 또 보자"
             }
             message.contains("고마워") -> {
                 "별말씀을요 기분이 풀리셨다면 다행이에요"

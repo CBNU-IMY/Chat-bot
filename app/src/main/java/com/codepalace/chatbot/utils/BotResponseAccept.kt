@@ -58,7 +58,7 @@ object BotResponseAccept {
             }
 
             //학교폭력(3)
-            message.contains("긍정") && message.contains("취미") -> {
+            message.contains("긍정")  -> {
                 corpuslist.get(2).system_response3
             }
 
