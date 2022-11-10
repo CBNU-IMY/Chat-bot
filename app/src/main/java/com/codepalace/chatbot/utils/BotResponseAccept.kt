@@ -41,20 +41,20 @@ object BotResponseAccept {
             }
 
             //Hello
-            message.contains("안녕") -> {
-                "안녕 잘 지내?"
+            message.contains("추천") -> {
+                corpuslist.get(7).system_response1
             }
 
 
 
             //학교폭력(1)
-            message.contains("학교") -> {
-                corpuslist.get(2).system_response1
+            message.contains("학점") -> {
+                corpuslist.get(7).system_response2
             }
 
             //학교폭력(2)
-            message.contains("비록") -> {
-                corpuslist.get(2).system_response2
+            message.contains("교수") -> {
+                corpuslist.get(7).system_response3
             }
 
             //학교폭력(3)
@@ -62,9 +62,9 @@ object BotResponseAccept {
                 corpuslist.get(2).system_response3
             }
 
-            //학교폭력(3)yy
+            //학교폭력(3)
             message.contains("고마워")  -> {
-                "물론이죠 우울할때마다 저를 찾아주세요"
+                "다행이네요 우울할때마다 저를 찾아주세요"
             }
 
 

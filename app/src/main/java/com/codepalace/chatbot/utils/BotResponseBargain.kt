@@ -56,7 +56,7 @@ object BotResponseBargain {
             }
 
             //
-            message.contains("의욕") -> {
+            message.contains("그럭") -> {
                 "우울증이 의심되는 것 같아요"
             }
 
@@ -64,6 +64,7 @@ object BotResponseBargain {
 
             //How are you?
             message.contains("how are you") -> {
+
                 when (random) {
                     0 -> "I'm doing fine, thanks!"
                     1 -> "I'm hungry..."
