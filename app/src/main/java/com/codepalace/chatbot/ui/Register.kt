@@ -139,7 +139,7 @@ class Register : AppCompatActivity() {
 
 
     fun Update(user: User){
-        val call = RetrofitBuilder.userapi.postUpdateResponse(user.user_id,user.user_pw.toString(),user.user_name.toString(),user.user_phone.toString())
+        val call = RetrofitBuilder.userapi.postUpdateResponse(user.user_id,user.user_pw.toString(),user.user_phone.toString(),user.user_name.toString(),)
         call.enqueue(object : Callback<String> { // 비동기 방식 통신 메소드
             override fun onResponse( // 통신에 성공한 경우
                 call: Call<String>,
