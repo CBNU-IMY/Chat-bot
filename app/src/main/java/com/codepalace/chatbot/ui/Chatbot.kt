@@ -82,7 +82,7 @@ class Chatbot : AppCompatActivity() {
 
         clickEvents()
 
-        val random = (0..3).random()
+        val random = (0..2).random()
         if(stage.equals("refuse")){
             customBotMessage("안녕! ${botList[random]}, 나는 IMY야")
         }
