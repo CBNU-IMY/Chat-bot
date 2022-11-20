@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codepalace.chatbot.Api.RetrofitBuilder
 import com.codepalace.chatbot.Data.Message
+import com.codepalace.chatbot.Dto.ChatbotDto
 import com.codepalace.chatbot.Dto.CorpusDto
 import com.codepalace.chatbot.Dto.CorpusDto2
 import com.codepalace.chatbot.databinding.ActivityChatbotBinding
@@ -40,6 +41,7 @@ class Chatbot : AppCompatActivity() {
     private lateinit var speechRecognizer: SpeechRecognizer
     private var textToSpeech: TextToSpeech? = null
 
+
     //You can ignore this messageList if you're coming from the tutorial,
     // it was used only for my personal debugging
     var messagesList = mutableListOf<Message>()
@@ -48,6 +50,7 @@ class Chatbot : AppCompatActivity() {
     private val botList = listOf("상우야", "정주야", "승규야")
     private var corpuslist : List<CorpusDto> = listOf() //corpus 데이터 받을 리스트 변수
     private lateinit var stage : String      //register로 부터 입력받은 우울증 단계
+    private var chatresponse=""   //ai chatbot 답변
 
     override fun onCreate(savedInstanceState: Bundle?) {
         stage=intent.getStringExtra("stage")!!
@@ -230,11 +233,15 @@ class Chatbot : AppCompatActivity() {
             //Fake response delay
             delay(1000)
             var response=""
+
             withContext(Dispatchers.Main) {
 
                 //Gets the response(3 case)
                 if(stage.equals("refuse")) {
-                     response = BotResponseRefuse.basicResponses(message, corpuslist)
+                    // response = BotResponseRefuse.basicResponses(message, corpuslist)
+                    Chatbotlist(message)
+                    println("chatresponse = ${chatresponse}")
+                    response=chatresponse
                 }
                 else if(stage.equals("bargain")){
                      response = BotResponseBargain.basicResponses(message, corpuslist)
@@ -336,6 +343,65 @@ class Chatbot : AppCompatActivity() {
 
     }
 
+
+
+     fun Chatbotlist(s : String) {
+        // val call = RetrofitBuilder.userapi.postSignupResponse(user)
+        //val call=RetrofitBuilder.chatbotapi.getKogpt2Response(s="나우울해")
+        val call=RetrofitBuilder.chatbotapi.getKogpt2Response(s)
+
+
+        Thread{
+            call.enqueue(object : Callback<ChatbotDto> { // 비동기 방식 통신 메소드
+                override fun onResponse( // 통신에 성공한 경우
+                    call: Call<ChatbotDto>,
+                    response: Response<ChatbotDto>
+                ) {
+                    if(response.isSuccessful()){ // 응답 잘 받은 경우
+                        chatresponse= response.body()!!.answer
+                        println("함수chatresponse = ${chatresponse}")
+                    }else{
+                        // 통신 성공 but 응답 실패
+                        Log.d("RESPONSE", "FAILURE")
+                    }
+
+                }
+
+                override fun onFailure(call: Call<ChatbotDto>, t: Throwable) {
+                    // 통신에 실패한 경우
+                    Log.d("CONNECTION FAILURE: ", t.localizedMessage)
+                }
+            })
+        }.start()
+
+        try{
+            Thread.sleep(50)
+        } catch(e: Exception){
+            e.printStackTrace()
+        }
+/*
+        call.enqueue(object : Callback<ChatbotDto> { // 비동기 방식 통신 메소드
+            override fun onResponse( // 통신에 성공한 경우
+                call: Call<ChatbotDto>,
+                response: Response<ChatbotDto>
+            ) {
+                if(response.isSuccessful()){ // 응답 잘 받은 경우
+                        chatresponse= response.body()!!.answer
+                    println("함수 chatresponse = ${chatresponse}")
+                }else{
+                    // 통신 성공 but 응답 실패
+                    Log.d("RESPONSE_NO", "FAILURE")
+                }
+            }
+
+            override fun onFailure(call: Call<ChatbotDto>, t: Throwable) {
+                // 통신에 실패한 경우
+                Log.d("CONNECTION FAILURE: ", t.localizedMessage)
+            }
+        })*/
+
+
+    }
 
 
 }
