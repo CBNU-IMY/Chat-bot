@@ -61,7 +61,8 @@ class Chatbot : AppCompatActivity() {
         setContentView(view)
    
 
-        Corpuslist()
+        //Corpuslist()
+
 
         // 권한 설정
         requestPermission()
@@ -229,20 +230,26 @@ class Chatbot : AppCompatActivity() {
 
         val timeStamp = Time.timeStamp()
 
-        GlobalScope.launch {
+       GlobalScope.launch {
             //Fake response delay
-            delay(1000)
+           // delay(1000)
             var response=""
 
-            withContext(Dispatchers.Main) {
+           withContext(Dispatchers.Main) {
 
                 //Gets the response(3 case)
                 if(stage.equals("refuse")) {
+
+                    println("여기가 빨리오나요?1111")
+
                     // response = BotResponseRefuse.basicResponses(message, corpuslist)
                     Chatbotlist(message)
+                    println("여기가 빨리오나요?3333")
                     println("chatresponse = ${chatresponse}")
                     response=chatresponse
                 }
+
+
                 else if(stage.equals("bargain")){
                      response = BotResponseBargain.basicResponses(message, corpuslist)
                 }
@@ -345,11 +352,14 @@ class Chatbot : AppCompatActivity() {
 
 
 
-     fun Chatbotlist(s : String) {
+   /*  suspend fun Chatbotlist(s : String) {
         // val call = RetrofitBuilder.userapi.postSignupResponse(user)
         //val call=RetrofitBuilder.chatbotapi.getKogpt2Response(s="나우울해")
         val call=RetrofitBuilder.chatbotapi.getKogpt2Response(s)
-
+         println("여기가 빨리오나요?2222")
+         val testdata=call.execute().body()
+         println("testdata = ${testdata}")
+         println("여기는 언제오나요???")
 
         Thread{
             call.enqueue(object : Callback<ChatbotDto> { // 비동기 방식 통신 메소드
@@ -379,12 +389,13 @@ class Chatbot : AppCompatActivity() {
         } catch(e: Exception){
             e.printStackTrace()
         }
-/*
+
         call.enqueue(object : Callback<ChatbotDto> { // 비동기 방식 통신 메소드
             override fun onResponse( // 통신에 성공한 경우
                 call: Call<ChatbotDto>,
                 response: Response<ChatbotDto>
             ) {
+                println("여기가 빨리오나요?4444")
                 if(response.isSuccessful()){ // 응답 잘 받은 경우
                         chatresponse= response.body()!!.answer
                     println("함수 chatresponse = ${chatresponse}")
@@ -398,8 +409,27 @@ class Chatbot : AppCompatActivity() {
                 // 통신에 실패한 경우
                 Log.d("CONNECTION FAILURE: ", t.localizedMessage)
             }
-        })*/
+        })
 
+
+
+
+
+    }*/
+
+
+
+    private suspend fun Chatbotlist(s: String) {
+        withContext(Dispatchers.IO) {
+
+            runCatching {
+                val retrofit = RetrofitBuilder.chatbotapi.getKogpt2Response(s)
+                val res = retrofit.execute().body()
+                //res.code() == 200
+                println("res = ${res}")
+                chatresponse= res!!.answer
+            }.getOrDefault(false)
+        }
 
     }
 

@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.codepalace.chatbot.Api.RetrofitBuilder
+import com.codepalace.chatbot.Api.RetrofitBuilder2
 import com.codepalace.chatbot.Data.User
 import com.codepalace.chatbot.Dto.CorpusDto
 import com.codepalace.chatbot.Dto.CorpusDto2
@@ -116,7 +117,8 @@ class Register : AppCompatActivity() {
 
     fun Userlist(){
         val textviewresult= binding.textViewResult
-        val call = RetrofitBuilder.userapi.getUserlistResponse()
+        //val call = RetrofitBuilder.userapi.getUserlistResponse()
+        val call = RetrofitBuilder2.userapi.getUserlistResponse()
         call.enqueue(object : Callback<String> { // 비동기 방식 통신 메소드
             override fun onResponse( // 통신에 성공한 경우
                 call: Call<String>,
